@@ -63,6 +63,7 @@ public class DestructableWall : MonoBehaviour
 
 	};
 
+	private PathsD _mainObject = new PathsD();
 
 
 
@@ -111,12 +112,23 @@ public class DestructableWall : MonoBehaviour
 
 		// add our subject which is the plane.
 		// TODO to fix issue, the holes must be in a reverse order, and we must use pathsD not pathD. https://angusj.com/clipper2/Docs/Units/Clipper/Types/PathsD.htm
-		PathD subject = new PathD();
+		PathsD subject = new PathsD();
+
+		PathD discard = new PathD();
+
+		// Somtthing with holeVertices use this to get the holes of the mesh.
+		// We have the verticies and the hole data points, and theey are in order so we can generate a poly shape.
+		// This need to use the same system as the ear cutting with doubble for the verticies and int for when holes starty.
+		// We dont need anything more complext than just one layer than holes as there would be a floating mesh, this would need to be removed any way.
+
+		// Maybe just take in a pathsD, then its fine. do the calc for the points somewhere else.
 
 		for (int mainObjectVert = 0; mainObjectVert < vertices.Count; mainObjectVert++)
 		{
-			subject.Add(new PointD(vertices[mainObjectVert].x, vertices[mainObjectVert].y));
+			discard.Add(new PointD(vertices[mainObjectVert].x, vertices[mainObjectVert].y));
 		}
+
+		subject.Add(discard);
 
 		clipper.AddSubject(subject);
 
